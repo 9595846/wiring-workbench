@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {library,initial,moduleType,instance,connect,splitWire} from '../web/model.mjs';
+import {electricalCheck,voltageRange} from '../web/checks.mjs';
+import {packageProject,validatePackage} from '../web/persistence.mjs';
+let passed=0;const test=(name,fn)=>{fn();console.log('PASS '+name);passed++;};
+function fixture(types){const modules=types.map((type,i)=>{const m=instance(moduleType('模块'+i,['针脚']),i*220,0);m.pins[0].electrical={type,required:false,pullup:'unknown'};return m;});const d={version:1,title:'检查',modules,nodes:[],annotations:[],wires:[]};for(let i=1;i<modules.length;i++)connect(d,{module:modules[0].id,pin:modules[0].pins[0].id},{module:modules[i].id,pin:modules[i].pins[0].id});return d;}
+const codes=d=>electricalCheck(d).issues.map(i=>i.code);
+test('old projects remain unknown, no guessed voltage',()=>{const d=initial(library()),r=electricalCheck(d);assert.equal(r.count.error,0);assert(r.count.info>0);assert.deepEqual(validatePackage(packageProject(d,library())).doc,d);});
+test('3.3V and 5V mismatch',()=>{const d=fixture(['power_out','power_in']);d.modules[0].pins[0].voltage='5V';d.modules[1].pins[0].voltage='3.0~3.6V';assert(codes(d).includes('voltage-range'));});
+test('compatible source and receiver',()=>{const d=fixture(['power_out','power_in']);d.modules[0].pins[0].voltage='3.3V';d.modules[1].pins[0].voltage='3.0~3.6V';assert.equal(electricalCheck(d).count.error,0);assert.equal(electricalCheck(d).count.info,0);});
+test('power and ground short',()=>assert(codes(fixture(['power_out','gnd'])).includes('polarity')));
+test('shared ground not flagged',()=>assert.deepEqual(electricalCheck(fixture(['gnd','gnd','gnd'])).count,{error:0,warning:0,info:0}));
+test('push-pull conflict and fanout distinction',()=>{assert(codes(fixture(['output','output'])).includes('output-contention'));assert(!codes(fixture(['output','input','input'])).includes('output-contention'));});
+test('open drain bus accepted, missing pullup explicit',()=>{const d=fixture(['open_drain','open_drain']);assert(!codes(d).includes('output-contention'));assert(codes(d).includes('pullup'));d.modules[0].pins[0].electrical.pullup='present';assert(!codes(d).includes('pullup'));});
+test('same-name net joins checks across disconnected drawings',()=>{const d=fixture(['power_out','gnd']);d.wires=[];d.nodes=[{id:'n1',kind:'net',name:'RAIL',x:0,y:0},{id:'n2',kind:'net',name:'RAIL',x:20,y:0}];d.modules.forEach((m,i)=>connect(d,{module:m.id,pin:m.pins[0].id},{node:'n'+(i+1)}));assert(codes(d).includes('polarity'));});
+test('required unconnected pin flagged, optional left alone',()=>{const d=fixture(['input']);assert.equal(electricalCheck(d).issues.length,0);d.modules[0].pins[0].electrical.required=true;assert(electricalCheck(d).issues.some(i=>i.code.startsWith('unconnected-')));});
+test('range parser rejects ambiguous and malformed values',()=>{assert.deepEqual(voltageRange('3.0~3.6V'),[3,3.6]);assert.equal(voltageRange('3.3/5V'),null);assert.equal(voltageRange('5~3V'),null);assert.equal(voltageRange('未知'),null);});
+test('branch topology retained during checks',()=>{const d=fixture(['power_out','gnd']);splitWire(d,d.wires[0].id,{x:100,y:0});const before=JSON.stringify(d);assert(codes(d).includes('polarity'));assert.equal(JSON.stringify(d),before);});
+test('invalid structured electrical data rejected on import',()=>{const d=fixture(['input']);d.modules[0].pins[0].electrical.type='imaginary';assert.throws(()=>packageProject(d,library()));});
+console.log(passed+' checks tests passed');

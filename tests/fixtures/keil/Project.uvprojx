@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project><Targets><Target><TargetName>ScannerFixture</TargetName><TargetOption><Device>STM32F103C8</Device></TargetOption><Groups><Group><GroupName>Hardware</GroupName><Files><File><FileName>display.c</FileName><FilePath>Hardware/display.c</FilePath></File></Files></Group></Groups></Target></Targets></Project>

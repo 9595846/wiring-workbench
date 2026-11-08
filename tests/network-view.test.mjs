@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {library,initial,nets,connect} from '../web/model.mjs';
+import {networkSelection,powerProjection} from '../web/network_view.mjs';
+import {electricalCheck} from '../web/checks.mjs';
+import {packageProject,validatePackage} from '../web/persistence.mjs';
+const lib=library(),d=initial(lib);d.nodes=[{id:'power',kind:'net',name:'3V3',x:320,y:60},{id:'g1',kind:'net',name:'GND',x:320,y:90},{id:'g2',kind:'net',name:'GND',x:400,y:90}];connect(d,d.wires[0].a,{node:'power'});connect(d,d.wires[1].a,{node:'g1'});
+const before=JSON.stringify([d.modules,d.wires,d.nodes,nets(d)]),checks=electricalCheck(d);d.powerDisplay='compact';const projection=powerProjection(d);assert.equal(projection.condensed,2);assert.equal(projection.hiddenWires.size,4);assert.equal(projection.stubs.length,4);assert.equal(JSON.stringify([d.modules,d.wires,d.nodes,nets(d)]),before);assert.deepEqual(electricalCheck(d),checks);
+const lit=networkSelection(d,{kind:'nodes',id:'g2'});assert(lit.nodeIds.has('g1'));assert(lit.nodeIds.has('g2'));assert(lit.wireIds.has(d.wires[1].id));assert(!lit.wireIds.has(d.wires[2].id));const pin=networkSelection(d,{kind:'pin',module:d.modules[0].id,id:d.modules[0].pins[2].id});assert.equal(pin.wireIds.size,1);
+const reveal=powerProjection(d,[d.wires[0].id]);assert(!reveal.hiddenWires.has(d.wires[0].id));assert(reveal.hiddenWires.has(d.wires[1].id));
+const pkg=packageProject(d,lib);assert.deepEqual(validatePackage(JSON.parse(JSON.stringify(pkg))),pkg);const bad=structuredClone(pkg);bad.doc.powerDisplay='invalid';assert.throws(()=>validatePackage(bad));
+d.nodes.push({id:'bad',kind:'net',name:'5V',x:330,y:0});connect(d,d.wires[0].a,{node:'bad'});assert(!powerProjection(d).hiddenWires.has(d.wires[0].id));
+d.powerDisplay='full';assert.equal(powerProjection(d).stubs.length,0);
+console.log('PASS display-only topology/checks invariance, aliases highlighted, independent signal untouched, temporary reveal, persistence and conflict fallback');

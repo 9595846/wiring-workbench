@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {library,initial,connect} from '../web/model.mjs';
+import {compareBindings} from '../web/keil.mjs';
+import {validatePackage,packageProject} from '../web/persistence.mjs';
+const lib=library(),d=initial(lib),w=d.wires[2];w.purpose='OLED SCL';w.codeBinding={project:'test.uvprojx',target:'A',file:'display.c',symbol:'SCL',controller:w.a};
+const scan={project:'test.uvprojx',target:'A',evidence:[{file:'display.c',symbols:['SCL'],pin:'PB10'}]};
+assert.equal(compareBindings(d,scan).find(r=>r.wire===w.id).status,'candidate');
+scan.evidence[0].pin='PB6';assert.equal(compareBindings(d,scan).find(r=>r.wire===w.id).status,'difference');
+scan.evidence.push({file:'display.c',symbols:['SCL'],pin:'PB10'});assert.equal(compareBindings(d,scan).find(r=>r.wire===w.id).status,'unknown');
+assert.equal(compareBindings(d,null).find(r=>r.wire===w.id).status,'unknown');
+assert.equal(compareBindings(d,{...scan,target:'B'}).find(r=>r.wire===w.id).status,'unknown');
+const pkg=packageProject(d,lib);assert.deepEqual(validatePackage(JSON.parse(JSON.stringify(pkg))),pkg);
+w.a=d.wires[0].a;assert.equal(compareBindings(d,scan).find(r=>r.wire===w.id).status,'unknown');
+console.log('PASS candidate/difference/ambiguity, no scan, wrong target, persisted bindings, changed topology');

@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {library,initial,wirePoints,nets,setRouteLock,tidyRoutes,routingStats} from '../web/model.mjs';
+import {packageProject,validatePackage} from '../web/persistence.mjs';
+const lib=library(),d=initial(lib),topology=()=>JSON.stringify({ends:d.wires.map(w=>[w.id,w.a,w.b]),nets:nets(d)}),before=topology();
+const locked=d.wires[0];const shape=structuredClone(wirePoints(d,locked));setRouteLock(d,locked,true);assert.deepEqual(wirePoints(d,locked),shape);const lockedData=JSON.stringify(locked);
+const other=d.wires[3],otherShape=structuredClone(wirePoints(d,other));const result=tidyRoutes(d,[d.wires[1].id]);assert.equal(result.changed,1);assert.deepEqual(wirePoints(d,other),otherShape);assert.equal(JSON.stringify(locked),lockedData);assert.equal(topology(),before);
+const manual=d.wires[2];manual.bends=[{x:380,y:40}];const manualData=JSON.stringify(manual);const r=tidyRoutes(d);assert.equal(r.locked,1);assert.equal(r.manual,1);assert.equal(JSON.stringify(manual),manualData);assert.equal(topology(),before);
+const frozen=structuredClone(locked.lockedBends);d.modules[0].y+=70;assert.deepEqual(locked.lockedBends,frozen);const moved=wirePoints(d,locked);assert.equal(moved[0].y,shape[0].y+70);
+const pkg=packageProject(d,lib);assert.deepEqual(validatePackage(JSON.parse(JSON.stringify(pkg))),pkg);const bad=structuredClone(pkg);bad.doc.wires[0].locked='yes';assert.throws(()=>validatePackage(bad));
+setRouteLock(d,locked,false);assert(!locked.locked);assert(!locked.lockedBends);assert.equal(topology(),before);
+assert(Number.isFinite(routingStats(d).crossings));console.log('PASS topology preserved, locked route stability, selected-only geometry, manual preservation, endpoint movement, persisted lock metadata and invalid import rejection');

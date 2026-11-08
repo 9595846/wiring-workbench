@@ -1,0 +1,837 @@
+{
+  "format": "wiring-workbench",
+  "version": 1,
+  "doc": {
+    "version": 1,
+    "title": "STM32 OLED 与 MH-FMD 蜂鸣器接线",
+    "modules": [
+      {
+        "id": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+        "version": 1,
+        "name": "STM32F103C8T6",
+        "kind": "控制器",
+        "pins": [
+          {
+            "id": "41fe1c16-0a13-4279-bb93-4a242be19cc4",
+            "name": "3.3V",
+            "side": "right",
+            "offset": 56,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "7dfc1ff0-2a03-4e63-a03f-d988cac7a652",
+            "name": "GND",
+            "side": "right",
+            "offset": 84,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "a7bd1fe2-de09-43bb-8928-5f32b9806b51",
+            "name": "PB10",
+            "side": "right",
+            "offset": 112,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "6112c501-e7c9-4d49-9cd4-735acc9ac6e2",
+            "name": "PB11",
+            "side": "right",
+            "offset": 140,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "15748200-03a9-41ee-b1f2-00f8b7771157",
+            "name": "PA8",
+            "side": "right",
+            "offset": 168,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "976660ed-1f9c-4795-b594-6f4a7901f9d8",
+            "name": "PA9",
+            "side": "right",
+            "offset": 196,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "af288f4b-ddf4-4887-ac9f-c43914799a87",
+            "name": "PB6",
+            "side": "right",
+            "offset": 224,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "578763d6-4f18-4b45-a15e-f070a43dc52c",
+            "name": "PB7",
+            "side": "right",
+            "offset": 252,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "295962e0e89145a6a787289b1d8981b7",
+            "name": "PB14",
+            "side": "right",
+            "offset": 280,
+            "voltage": "0~3.3V",
+            "role": "蜂鸣器低电平控制，代码 controls.c PB14",
+            "electrical": {
+              "type": "output",
+              "required": true,
+              "pullup": "unknown"
+            }
+          }
+        ],
+        "templateId": "48604de9-dba4-4b8a-8487-5533f27ac86b",
+        "x": 100,
+        "y": 100,
+        "w": 190,
+        "h": 300
+      },
+      {
+        "id": "0b27a648-93cf-46da-80d7-ce3f8eab26f6",
+        "version": 1,
+        "name": "OLED · I²C",
+        "kind": "显示",
+        "pins": [
+          {
+            "id": "86a79a79-2571-4bf8-9419-cd67c7b731a7",
+            "name": "VCC",
+            "side": "left",
+            "offset": 56,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "571b9a43-306e-4cf4-9f52-0821fabccf0b",
+            "name": "GND",
+            "side": "left",
+            "offset": 84,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "905ec8ba-53b3-4e30-bd5c-8b22ccda810c",
+            "name": "SCL",
+            "side": "left",
+            "offset": 112,
+            "voltage": "未知",
+            "role": "未知"
+          },
+          {
+            "id": "7c88a588-f516-4e75-995e-1c103895da00",
+            "name": "SDA",
+            "side": "left",
+            "offset": 140,
+            "voltage": "未知",
+            "role": "未知"
+          }
+        ],
+        "templateId": "71ec698c-fbb5-4a1a-9136-2ad7ff1e4ac0",
+        "x": 490,
+        "y": 140,
+        "w": 190,
+        "h": 185
+      },
+      {
+        "id": "8c896965dec6419aaeae83dfd18d3ad2",
+        "templateId": "7aed96a66a464fdfafb9f8d8e609e6ae",
+        "name": "MH-FMD 低电平蜂鸣器",
+        "kind": "蜂鸣器",
+        "version": 1,
+        "x": 490,
+        "y": 470,
+        "w": 235,
+        "h": 150,
+        "description": "用户确认接口 VCC / I/O / GND、低电平触发。供电范围和 3.3V 逻辑兼容尚待确认。",
+        "pins": [
+          {
+            "id": "83f06c4bc0e84bc3a64331ed5feddb1a",
+            "name": "VCC",
+            "side": "top",
+            "offset": 55,
+            "voltage": "未知",
+            "role": "暂按3.3V连接，模块供电范围待确认",
+            "electrical": {
+              "type": "power_in",
+              "required": true,
+              "pullup": "unknown"
+            }
+          },
+          {
+            "id": "fbc933c767384a63aa34c22e9511a77c",
+            "name": "GND",
+            "side": "top",
+            "offset": 180,
+            "voltage": "未知",
+            "role": "与STM32共地",
+            "electrical": {
+              "type": "gnd",
+              "required": true,
+              "pullup": "unknown"
+            }
+          },
+          {
+            "id": "43ee574bdf0747aca2790aea2cc03255",
+            "name": "I/O",
+            "side": "left",
+            "offset": 90,
+            "voltage": "未知",
+            "role": "PB14低电平触发，高电平停止；允许输入范围待确认",
+            "electrical": {
+              "type": "input",
+              "required": true,
+              "pullup": "unknown"
+            }
+          }
+        ]
+      }
+    ],
+    "wires": [
+      {
+        "id": "7843607e-2926-4de0-93ed-f8e567949544",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "41fe1c16-0a13-4279-bb93-4a242be19cc4"
+        },
+        "b": {
+          "module": "0b27a648-93cf-46da-80d7-ce3f8eab26f6",
+          "pin": "86a79a79-2571-4bf8-9419-cd67c7b731a7"
+        },
+        "color": "#b76e3b",
+        "name": "VCC",
+        "purpose": "",
+        "style": "ortho",
+        "bends": []
+      },
+      {
+        "id": "d03f6da3-8755-4b14-a802-87aa2ce117be",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "7dfc1ff0-2a03-4e63-a03f-d988cac7a652"
+        },
+        "b": {
+          "module": "0b27a648-93cf-46da-80d7-ce3f8eab26f6",
+          "pin": "571b9a43-306e-4cf4-9f52-0821fabccf0b"
+        },
+        "color": "#65717b",
+        "name": "GND",
+        "purpose": "",
+        "style": "ortho",
+        "bends": []
+      },
+      {
+        "id": "1bd56ade-26c9-4710-9524-432480885244",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "a7bd1fe2-de09-43bb-8928-5f32b9806b51"
+        },
+        "b": {
+          "module": "0b27a648-93cf-46da-80d7-ce3f8eab26f6",
+          "pin": "905ec8ba-53b3-4e30-bd5c-8b22ccda810c"
+        },
+        "color": "#257c69",
+        "name": "SCL",
+        "purpose": "",
+        "style": "ortho",
+        "bends": []
+      },
+      {
+        "id": "16dbf259-f7a8-4347-bc32-a25c0358057a",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "6112c501-e7c9-4d49-9cd4-735acc9ac6e2"
+        },
+        "b": {
+          "module": "0b27a648-93cf-46da-80d7-ce3f8eab26f6",
+          "pin": "7c88a588-f516-4e75-995e-1c103895da00"
+        },
+        "color": "#4182af",
+        "name": "SDA",
+        "purpose": "",
+        "style": "ortho",
+        "bends": []
+      },
+      {
+        "id": "4b50350abc0c400db43fa0e05f490696",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "41fe1c16-0a13-4279-bb93-4a242be19cc4"
+        },
+        "b": {
+          "node": "0991409ebfa04651b5d87c7dd03ec0d7"
+        },
+        "name": "",
+        "color": "#b76e3b",
+        "purpose": "3V3 网络，保留原OLED接线",
+        "style": "straight",
+        "bends": []
+      },
+      {
+        "id": "25310c05bdc94e7eac387f586665472a",
+        "a": {
+          "module": "8c896965dec6419aaeae83dfd18d3ad2",
+          "pin": "83f06c4bc0e84bc3a64331ed5feddb1a"
+        },
+        "b": {
+          "node": "4d06003d18ba4bbba6b2e8689ea3b857"
+        },
+        "name": "",
+        "color": "#b76e3b",
+        "purpose": "蜂鸣器 3V3 接线（供电范围待确认）",
+        "style": "straight",
+        "bends": []
+      },
+      {
+        "id": "7065ac80fd254d15bef69fe6c807c36d",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "7dfc1ff0-2a03-4e63-a03f-d988cac7a652"
+        },
+        "b": {
+          "node": "fde2c1f7748341618a231a935a4d713b"
+        },
+        "name": "",
+        "color": "#65717b",
+        "purpose": "GND 网络，保留原OLED接线",
+        "style": "straight",
+        "bends": []
+      },
+      {
+        "id": "133f30a61fe64094b97f2d5a02ab2b3a",
+        "a": {
+          "module": "8c896965dec6419aaeae83dfd18d3ad2",
+          "pin": "fbc933c767384a63aa34c22e9511a77c"
+        },
+        "b": {
+          "node": "6a5a7b274d9c4a339dd0408edc33ec5c"
+        },
+        "name": "",
+        "color": "#65717b",
+        "purpose": "蜂鸣器 GND 接线（供电范围待确认）",
+        "style": "straight",
+        "bends": []
+      },
+      {
+        "id": "abefa3a1f2d14ce4a2c9fd0b1437f1e4",
+        "a": {
+          "module": "0c85470e-c30b-4483-bd96-9db9fc10dc2f",
+          "pin": "295962e0e89145a6a787289b1d8981b7"
+        },
+        "b": {
+          "module": "8c896965dec6419aaeae83dfd18d3ad2",
+          "pin": "43ee574bdf0747aca2790aea2cc03255"
+        },
+        "name": "PB14 → I/O",
+        "color": "#257c69",
+        "purpose": "MH-FMD 低电平触发",
+        "style": "ortho",
+        "bends": []
+      }
+    ],
+    "nodes": [
+      {
+        "id": "0991409ebfa04651b5d87c7dd03ec0d7",
+        "kind": "net",
+        "name": "3V3",
+        "x": 385,
+        "y": 156
+      },
+      {
+        "id": "4d06003d18ba4bbba6b2e8689ea3b857",
+        "kind": "net",
+        "name": "3V3",
+        "x": 545,
+        "y": 410
+      },
+      {
+        "id": "fde2c1f7748341618a231a935a4d713b",
+        "kind": "net",
+        "name": "GND",
+        "x": 385,
+        "y": 184
+      },
+      {
+        "id": "6a5a7b274d9c4a339dd0408edc33ec5c",
+        "kind": "net",
+        "name": "GND",
+        "x": 670,
+        "y": 410
+      }
+    ],
+    "annotations": [
+      {
+        "id": "f335225fb72f49d6840786574aeacac9",
+        "kind": "note",
+        "text": "控制示例：PB14 拉低响、拉高停（需配套固件）。",
+        "x": 100,
+        "y": 665,
+        "w": 650,
+        "h": 28,
+        "color": "#5c7164"
+      },
+      {
+        "id": "a79534f4c1d84ccc94630012106fc549",
+        "kind": "note",
+        "text": "VCC 暂按 3.3V 接线；模块供电及逻辑兼容仍待确认。",
+        "x": 100,
+        "y": 695,
+        "w": 650,
+        "h": 28,
+        "color": "#5c7164"
+      },
+      {
+        "id": "3e7145226f164d72a97df8f2f0c8dcc4",
+        "kind": "note",
+        "text": "卡片仅表示连接关系，不代表实物针脚排列。",
+        "x": 100,
+        "y": 725,
+        "w": 650,
+        "h": 28,
+        "color": "#5c7164"
+      }
+    ],
+    "powerDisplay": "compact"
+  },
+  "library": [
+    {
+      "id": "48604de9-dba4-4b8a-8487-5533f27ac86b",
+      "version": 1,
+      "name": "STM32F103C8T6",
+      "kind": "控制器",
+      "pins": [
+        {
+          "id": "41fe1c16-0a13-4279-bb93-4a242be19cc4",
+          "name": "3.3V",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "7dfc1ff0-2a03-4e63-a03f-d988cac7a652",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "a7bd1fe2-de09-43bb-8928-5f32b9806b51",
+          "name": "PB10",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "6112c501-e7c9-4d49-9cd4-735acc9ac6e2",
+          "name": "PB11",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "15748200-03a9-41ee-b1f2-00f8b7771157",
+          "name": "PA8",
+          "side": "left",
+          "offset": 106,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "976660ed-1f9c-4795-b594-6f4a7901f9d8",
+          "name": "PA9",
+          "side": "right",
+          "offset": 106,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "af288f4b-ddf4-4887-ac9f-c43914799a87",
+          "name": "PB6",
+          "side": "left",
+          "offset": 134,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "578763d6-4f18-4b45-a15e-f070a43dc52c",
+          "name": "PB7",
+          "side": "right",
+          "offset": 134,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "71ec698c-fbb5-4a1a-9136-2ad7ff1e4ac0",
+      "version": 1,
+      "name": "OLED · I²C",
+      "kind": "显示",
+      "pins": [
+        {
+          "id": "86a79a79-2571-4bf8-9419-cd67c7b731a7",
+          "name": "VCC",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "571b9a43-306e-4cf4-9f52-0821fabccf0b",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "905ec8ba-53b3-4e30-bd5c-8b22ccda810c",
+          "name": "SCL",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "7c88a588-f516-4e75-995e-1c103895da00",
+          "name": "SDA",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "48e8d30f-a214-4f19-ae3d-bc1e9fa93db4",
+      "version": 1,
+      "name": "MPU6050 / 6500",
+      "kind": "传感器",
+      "pins": [
+        {
+          "id": "b7244fa5-0a8b-4728-aaea-68c8a99bc4fd",
+          "name": "VCC",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "85f34b3c-2fa0-47a3-82dc-e1759e212ebe",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "047c3c00-92ba-439c-b6c1-3a91df99588c",
+          "name": "SCL",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "e72956be-fdbc-47b0-bb24-2bc56f8b7cd4",
+          "name": "SDA",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "d22454d2-83ff-4828-b52b-7f0232471c99",
+          "name": "AD0",
+          "side": "left",
+          "offset": 106,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "3b28076e-352b-4403-8c1e-c124bab4d4ae",
+          "name": "INT",
+          "side": "right",
+          "offset": 106,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "51d774f4-d884-41fc-91cd-9e57aa7ab635",
+      "version": 1,
+      "name": "SG90",
+      "kind": "执行器",
+      "pins": [
+        {
+          "id": "70c4638c-85f7-4ddb-9f0e-503cb70d059f",
+          "name": "电源+",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "4f43bf59-414f-46cb-8729-68d76f368c5f",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "953be4b3-ac05-48ff-b604-e53452f423d0",
+          "name": "信号",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "5f6d4b9c-7b84-4e85-8245-8ce92c5cd5aa",
+      "version": 1,
+      "name": "旋钮编码器",
+      "kind": "输入",
+      "pins": [
+        {
+          "id": "bb4bb167-3a33-41b2-9698-b887fc2d8546",
+          "name": "A",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "cbf45d92-22f4-499c-9c00-85b43756633a",
+          "name": "B",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "d7821ca0-2a9a-4220-9fe4-e8c5736853c2",
+          "name": "公共端",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "4542600b-0ce9-4155-88e7-491c17b78d37",
+      "version": 1,
+      "name": "独立按键",
+      "kind": "输入",
+      "pins": [
+        {
+          "id": "6a10859e-7aeb-4986-aa28-942f945e4ace",
+          "name": "触点1",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "012b2704-be49-4d99-8ef9-0ab17ff6fef7",
+          "name": "触点2",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "d0b43dc3-7f1a-461c-bd34-cfebbe6245d1",
+      "version": 1,
+      "name": "LED + 限流电阻",
+      "kind": "输出",
+      "pins": [
+        {
+          "id": "4172b0fa-d04b-4e8f-83bc-53322966db71",
+          "name": "阳极",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "f9f83bee-5e67-4204-b568-5709c738ab3f",
+          "name": "阴极",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "98a2f2e0-c447-4696-a407-52123c64260d",
+      "version": 1,
+      "name": "电源模块",
+      "kind": "供电",
+      "pins": [
+        {
+          "id": "155e8ec6-a1ac-4a51-955e-150d66e1df48",
+          "name": "输入+",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "11398f16-9749-46a7-b6ad-77abf2d6b95f",
+          "name": "输入-",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "f7b8d287-78c9-4e8e-8629-56410a7c22d7",
+          "name": "输出+",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "c5d389ed-7d7e-4813-8856-e087471e39ab",
+          "name": "输出-",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "609a505d-7100-4304-bb37-850ccfd6adb9",
+      "version": 1,
+      "name": "USB 转串口",
+      "kind": "通信",
+      "pins": [
+        {
+          "id": "b9a96402-1fe5-429e-b448-eb929f48bb46",
+          "name": "VCC",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "f7f33c48-05c6-4753-bbff-4c9da411b497",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "15491670-51bb-434c-8509-0b3d7885d88c",
+          "name": "TXD",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "6f215145-da57-4d96-a435-7c522c310e5f",
+          "name": "RXD",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "98d8a7e5-34e7-40f0-b389-536f367c3455",
+      "version": 1,
+      "name": "蜂鸣器模块",
+      "kind": "输出",
+      "pins": [
+        {
+          "id": "ace2d382-badc-41b3-936d-1fb7b8019062",
+          "name": "VCC",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "2a8d22da-1125-4432-9938-96046eae19b2",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "d8376ea0-6b8f-47cf-bc08-73a57beaccc1",
+          "name": "I/O",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    },
+    {
+      "id": "e9e35646-8139-4c92-8804-97148ca9df01",
+      "version": 1,
+      "name": "光敏 AO/DO",
+      "kind": "传感器",
+      "pins": [
+        {
+          "id": "b2d7d35f-01f4-4233-a191-6cb18dbd82aa",
+          "name": "VCC",
+          "side": "left",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "fcf8c660-c5b1-4025-aeb2-0e2741ec785f",
+          "name": "GND",
+          "side": "right",
+          "offset": 50,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "7b4d542a-9ced-4f2e-9cef-aa44404d3660",
+          "name": "AO",
+          "side": "left",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        },
+        {
+          "id": "8abb2549-3ca6-4855-8611-57835d029fc5",
+          "name": "DO",
+          "side": "right",
+          "offset": 78,
+          "voltage": "未知",
+          "role": "未知"
+        }
+      ]
+    }
+  ]
+}
