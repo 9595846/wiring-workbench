@@ -6,3 +6,5 @@
 *.yml text eol=lf
 *.cmd text eol=crlf
 *.jpg binary
+# Adapter fingerprints are over exact bytes, including original line endings.
+oled_companion/firmware_baseline/** -text
