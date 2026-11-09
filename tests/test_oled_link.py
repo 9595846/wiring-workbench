@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
   with patch.object(link.subprocess,'Popen') as popen:
    with self.assertRaises(ValueError):link.launch('project_test',expected_revision=2)
    popen.assert_not_called();link.launch('project_test',expected_revision=3)
-   self.assertEqual(popen.call_args.args[0],[str(self.exe),'--project','project_test'])
+   self.assertEqual(popen.call_args.args[0],[str(self.exe.resolve()),'--project','project_test'])
  def test_relative_paths_are_based_on_config_location(self):
   link.CONFIG.write_text(json.dumps({'workspace':'.','executable':'OLEDWorkbench.exe'}))
   self.assertEqual(link.config(),(self.exe.resolve(),self.root.resolve()))
