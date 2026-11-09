@@ -28,6 +28,9 @@ class Handler(SimpleHTTPRequestHandler):
                 if url.path=='/api/library':
                     from global_library import read_library
                     return self.reply(read_library())
+                if url.path=='/api/oled/projects':
+                    import oled_link
+                    return self.reply(oled_link.listing())
                 if url.path=='/api/projects':return self.reply(project_store.listing(DATA))
                 if url.path=='/api/project':return self.reply(project_store.read(parse_qs(url.query)['id'][0],DATA))
                 if url.path=='/api/history':return self.reply(project_store.checkpoints(parse_qs(url.query)['id'][0],DATA))
@@ -40,6 +43,13 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if not self.authorized():return self.reply({'error':'未授权'},403)
         try:
+            if self.path in ('/api/oled/open','/api/oled/preview'):
+                length=int(self.headers.get('Content-Length','0'))
+                if not 0<length<=4096:raise ValueError('联动请求过大')
+                data=json.loads(self.rfile.read(length))
+                import oled_link
+                if self.path.endswith('/open'):return self.reply(oled_link.launch(data['name'],data.get('expected_revision')))
+                return self.reply(oled_link.preview(data['name'],data.get('page',0),data.get('expected_revision')))
             if self.path in ('/api/library/seed','/api/library/publish'):
                 length=int(self.headers.get('Content-Length','0'))
                 if not 0<length<=2000000:raise ValueError('模块库请求过大')

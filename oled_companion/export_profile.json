@@ -1,0 +1,14 @@
+{
+  "id": "defuse_display_pixel_v1",
+  "firmware": "defuse_box/firmware",
+  "device": "STM32F103C8",
+  "flash_bytes": 65536,
+  "ram_bytes": 20480,
+  "sha256": {
+    "Project.uvprojx": "2e55f1fc66a974b57a34ea50950426c01b9572c6f328eb92d7310e456136f33f",
+    "Hardware/display.h": "6e34549494f031693ef0a8c39938d66482a364abddad2e997a72f23b675d6f4b",
+    "Hardware/display.c": "5869d48e8a5f428b5d329076ea7857aa97fdca24dd804a16ce676e604c0204a4",
+    "Hardware/controls.h": "267a1c0f2dba8ec7cfdb7ea8b637c783c04e97e93c617bf2b0c963df8ed5dccf",
+    "User/main.c": "d4498a0873d189e17da133b8348db02a7cca37eb73eac53057ddf8599e815a4d"
+  }
+}

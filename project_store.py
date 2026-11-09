@@ -4,14 +4,15 @@ from contextlib import contextmanager
 import json,os,re,tempfile,threading,hashlib,uuid,subprocess,shutil
 from datetime import datetime,timezone
 DATA=Path(__file__).resolve().parent/'projects'
+NODE_EXECUTABLE=None  # Desktop bundle sets an absolute runtime path.
 LOCK=threading.RLock()
 class Conflict(ValueError):pass
 def engine(action,**data):
- node=shutil.which('node')
+ node=NODE_EXECUTABLE or shutil.which('node')
  if not node:raise ValueError('需要安装 Node.js 并加入 PATH')
  payload=json.dumps({'action':action,**data},ensure_ascii=False)
  if len(payload.encode('utf-8'))>4000000:raise ValueError('项目请求超过 4MB')
- try:r=subprocess.run([node,str(Path(__file__).with_name('bridge.mjs'))],input=payload,text=True,encoding='utf-8',capture_output=True,timeout=45)
+ try:r=subprocess.run([node,str(Path(__file__).with_name('bridge.mjs'))],input=payload,text=True,encoding='utf-8',capture_output=True,timeout=45,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
  except subprocess.TimeoutExpired:raise ValueError('模型处理超时，未保存修改')
  try:reply=json.loads(r.stdout)
  except ValueError:raise ValueError('模型处理失败：'+r.stderr[-300:])

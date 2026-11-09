@@ -138,7 +138,12 @@
         "x": 490,
         "y": 140,
         "w": 190,
-        "h": 185
+        "h": 185,
+        "oledLink": {
+          "name": "project_my_oled",
+          "page": 0,
+          "revision": 1
+        }
       },
       {
         "id": "8c896965dec6419aaeae83dfd18d3ad2",

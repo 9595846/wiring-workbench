@@ -19,3 +19,14 @@ tests/*.js
 .env
 .env.*
 !.env.example
+dist/
+build/
+desktop_data/
+desktop_notices/
+oled_link.local.json
+oled_companion/drafts/
+oled_companion/exports/
+oled_companion/requests/
+oled_companion/integration_history/
+oled_companion/desktop_logs/
+oled_companion/.desktop-venv/

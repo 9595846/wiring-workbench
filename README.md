@@ -1,5 +1,7 @@
 # 模块接线工作台 · Wiring Workbench
 
+本仓库也是**电子项目工作台套装的主仓库**，包含接线软件、OLED 配套编辑器源码、图文启动器、图标与背景、一键正常关闭和两端联动。可分别使用，也可构建为一个便携目录，详见 [套装构建与使用](docs/SUITE.md)。OLED 独立项目仍位于 [oled-ui-workbench](https://github.com/9595846/oled-ui-workbench)。
+
 Windows 本机运行的中文接线设计工具：自定义模块与针脚、自由接线、供电短线显示、整网高亮、静态检查、Keil 只读核对，以及支持恢复点的 MCP 编辑。
 
 图纸表示模块连接关系，用于设计与讲解；不是面包板孔位图，不执行电路仿真。
@@ -21,6 +23,12 @@ Windows 本机运行的中文接线设计工具：自定义模块与针脚、自
 预置 STM32F103C8T6、OLED、MPU6050/6500、SG90、编码器、按键、LED、电源、串口、蜂鸣器和光敏模块；名称不代表确认过供电或逻辑兼容。
 
 ## 启动
+
+Windows 桌面入口与构建说明见 [DESKTOP.md](docs/DESKTOP.md)。在源码环境运行 `python desktop.py`，或使用构建生成的 `dist/WiringWorkbench/WiringWorkbench.exe`。桌面数据与原网页数据分开，使用 JSON 导入现有图纸。
+
+已支持绑定并打开本机 OLED 软件，刷新已保存设计的预览及版本提示，见 [OLED 联动说明](docs/OLED_LINK.md)。
+
+两个软件也可放入带独立启动器的便携套装，分别保存数据，见 [套装说明](docs/SUITE.md)。
 
 需要 **Windows 10/11、Python 3.10+、Node.js 22+**。当前跨进程文件锁使用 Windows `msvcrt`，尚未支持 Linux/macOS。无需 npm 安装或前端构建。
 
