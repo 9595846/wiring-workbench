@@ -4,7 +4,7 @@
 
 面向 STM32 学习者、电子爱好者和教学演示：放入模块、连接引脚、高亮整条网络，导出接线图与接线表；还可以只读核对 Keil 工程中的引脚证据。Windows 本地运行，首次体验无需开发板、Keil 或 AI 账号。
 
-[开始体验](#启动) · [第一次画图](docs/FIRST_RUN.md) · [桌面套装](docs/SUITE.md) · [反馈问题](https://github.com/9595846/wiring-workbench/issues/new/choose)
+[下载试用版](https://github.com/9595846/wiring-workbench/releases/tag/v0.1.0-preview.1) · [项目笔记](docs/knowledge/README.md) · [源码启动](#启动) · [第一次画图](docs/FIRST_RUN.md) · [桌面套装](docs/SUITE.md) · [反馈问题](https://github.com/9595846/wiring-workbench/issues/new/choose)
 
 ![供电短线与 GND 整网高亮](docs/assets/network-highlight.jpg)
 
@@ -19,7 +19,7 @@
 | 只使用独立 OLED 编辑器及 Keil 示例 | 前往 [oled-ui-workbench](https://github.com/9595846/oled-ui-workbench) |
 | 让 AI 协助编辑已保存图纸 | 先完成普通使用，再按 [MCP 指南](MCP_GUIDE.md)配置 |
 
-**分发状态（2026-11-10）：** 目前提供源码与桌面构建方法，尚未发布可下载的正式 Release。文档中的 EXE 路径指构建产物；GitHub 的“Download ZIP”是源码，不是安装包。已有本机桌面验证，另一台干净 Windows 电脑的验收仍待完成。
+**试用版已发布：** [v0.1.0-preview.1 · Windows x64](https://github.com/9595846/wiring-workbench/releases/tag/v0.1.0-preview.1)。完整解压后打开 `WorkbenchSuite.exe`，内置 Python/Node，需要系统 WebView2。云端回归、打包和迁移目录 EXE 自测已通过；完整原生窗口操作及另一台实体电脑的人工验收仍待完成。GitHub“Code → Download ZIP”是源码，请从 Release 下载软件。
 
 ## 能帮你解决什么
 
@@ -43,6 +43,12 @@
 预置 STM32F103C8T6、OLED、MPU6050/6500、SG90、编码器、按键、LED、电源、串口、蜂鸣器和光敏模块；名称不代表确认过供电或逻辑兼容。
 
 ## 启动
+
+### 下载桌面试用版
+
+从 [Release 页面](https://github.com/9595846/wiring-workbench/releases/tag/v0.1.0-preview.1)下载 `WorkbenchSuite-v0.1.0-preview.1-windows-x64.zip`，完整解压到个人可写目录，双击 `WorkbenchSuite.exe`。保留全部子目录。详见 [试用指南](docs/PREVIEW_RELEASE.md) 与 [发布验证记录](docs/knowledge/04-发布与验证记录.md)。
+
+### 从源码启动
 
 Windows 桌面入口与构建说明见 [DESKTOP.md](docs/DESKTOP.md)。在源码环境运行 `python desktop.py`，或使用构建生成的 `dist/WiringWorkbench/WiringWorkbench.exe`。桌面数据与原网页数据分开，使用 JSON 导入现有图纸。
 
@@ -108,3 +114,4 @@ examples/ docs/      示例、说明与效果图
 本工具不会访问串口、控制硬件、修改 Keil 或编译/烧录。静态检查不验证电源容量、实际针序、电平、限流阻值或全部复用/定时器配置。
 
 第三方依赖见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。尚未指定代码许可证；公开可见不等于授予任意复制、修改或分发许可。
+
