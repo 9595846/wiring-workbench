@@ -26,13 +26,30 @@ def copy_missing(source,destination):
             target=destination/p.relative_to(source)
             if not target.exists():target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,target)
 
+def prepare_destination(destination, public=False):
+    if public and destination.exists():
+        raise ValueError('Public build requires a new output directory; existing data will not be overwritten')
+    destination.mkdir(parents=True,exist_ok=True)
+
+def seed_user_data(destination, public=False):
+    if public:
+        return
+    copy_missing(ROOT/'dist/WiringWorkbench/data/projects',destination/'WiringWorkbench/data/projects')
+    copy_missing(ROOT/'dist/WiringWorkbench/data/module_library',destination/'WiringWorkbench/data/module_library')
+    for name in ('drafts','requests','integration_history','exports'):
+        copy_missing(OLED/name,destination/'oled_workspace'/name)
+
 def main():
     global DEST
     parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path)
+    parser.add_argument('--public',action='store_true',help='Exclude all user data; require a new output directory')
     options=parser.parse_args()
     if options.output:DEST=options.output.resolve()
-    STAGE.mkdir(parents=True,exist_ok=True);DEST.mkdir(parents=True,exist_ok=True)
-    python=ROOT/'.venv/Scripts/python.exe'
+    if options.public and not (ROOT/'oled_companion/firmware_baseline').is_dir():
+        raise SystemExit('Public build requires the repository OLED companion and baseline')
+    prepare_destination(DEST,options.public)
+    STAGE.mkdir(parents=True,exist_ok=True)
+    python=Path(sys.executable)
     node=shutil.which('node')
     if not node:raise SystemExit('Node required on build machine')
     extra=['--collect-all','webview','--add-binary',node+';runtime']
@@ -40,7 +57,7 @@ def main():
         extra+=['--add-data',str(ROOT/item)+';'+(item if (ROOT/item).is_dir() else '.')]
     build('WiringWorkbench',ROOT/'desktop.py',python,extra)
     oled_python=OLED/'.desktop-venv/Scripts/python.exe'
-    build('OLEDWorkbench',OLED/'desktop.py',oled_python if oled_python.exists() else python,
+    build('OLEDWorkbench',OLED/'desktop.py',oled_python if oled_python.exists() and not options.public else python,
           ['--collect-all','webview','--collect-all','pythonnet','--hidden-import','webview.platforms.winforms'])
     build('WorkbenchSuite',ROOT/'suite_launcher.py',python,['--contents-directory','_launcher',
           '--icon',str(ROOT/'assets/launcher/workbench.ico'),
@@ -51,13 +68,10 @@ def main():
     shutil.copy2(launcher/'WorkbenchSuite.exe',DEST/'WorkbenchSuite.exe')
     shutil.copytree(launcher/'_launcher',DEST/'_launcher',dirs_exist_ok=True)
     # Independent user data: initial snapshots only, never overwrite on a rebuild.
-    copy_missing(ROOT/'dist/WiringWorkbench/data/projects',DEST/'WiringWorkbench/data/projects')
-    copy_missing(ROOT/'dist/WiringWorkbench/data/module_library',DEST/'WiringWorkbench/data/module_library')
+    seed_user_data(DEST,options.public)
     for name in ('web','fonts','export_runtime'):
         shutil.copytree(OLED/name,DEST/'oled_workspace'/name,dirs_exist_ok=True)
     shutil.copy2(OLED/'export_profile.json',DEST/'oled_workspace/export_profile.json')
-    for name in ('drafts','requests','integration_history','exports'):
-        copy_missing(OLED/name,DEST/'oled_workspace'/name)
     # Only read-only rendering/adapter reference assets, not a compilable Keil project.
     profile=json.loads((OLED/'export_profile.json').read_text(encoding='utf-8'))
     files=set(profile['sha256'])|{'Hardware/font.h','Hardware/zh12.h','Hardware/ui_text.h'}
@@ -71,8 +85,13 @@ def main():
     for path,data in settings.items():
         if not path.exists():path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
     if (ROOT/'desktop_notices').exists():shutil.copytree(ROOT/'desktop_notices',DEST/'licenses',dirs_exist_ok=True)
+    if options.public:
+        from collect_release_licenses import collect
+        collect(DEST/'licenses',Path(node))
+        shutil.copytree(ROOT/'examples',DEST/'examples')
+        shutil.copy2(ROOT/'docs/PREVIEW_RELEASE.md',DEST/'START_HERE.md')
     shutil.copy2(ROOT/'docs/SUITE.md',DEST/'使用说明.md')
-    receipt={'format':1,'apps':['WiringWorkbench','OLEDWorkbench'],
+    receipt={'format':1,'public_build':options.public,'apps':['WiringWorkbench','OLEDWorkbench'],
         'data':['WiringWorkbench/data','oled_workspace/drafts','oled_workspace/requests','oled_workspace/exports'],
         'executables':{name:hashlib.sha256((DEST/name).read_bytes()).hexdigest() for name in ('WorkbenchSuite.exe','WiringWorkbench/WiringWorkbench.exe','OLEDWorkbench/OLEDWorkbench.exe')}}
     (DEST/'suite-manifest.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2),encoding='utf-8')

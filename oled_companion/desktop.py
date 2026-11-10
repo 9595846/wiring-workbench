@@ -64,6 +64,41 @@ def main():
             import exporter
             exporter.profile()
             report['http_and_profile'] = 'passed'
+            import core, studio, tempfile
+            from PIL import Image
+            with tempfile.TemporaryDirectory(prefix='oled-self-test-') as temporary:
+                old_drafts, old_exports = core.DRAFTS, exporter.EXPORTS
+                try:
+                    core.DRAFTS = Path(temporary)/'drafts'
+                    exporter.EXPORTS = Path(temporary)/'exports'
+                    draft = studio.new()
+                    draft['pages'][0]['elements'][0]['text'] = 'HELLO'
+                    saved = core.save('project_release_test', draft, 0)
+                    assert core.load('project_release_test') == saved
+                    try:
+                        core.save('project_release_test', draft, 0)
+                    except RuntimeError:
+                        pass
+                    else:
+                        raise AssertionError('Stale revision accepted')
+                    picture, issues = core.render(saved)
+                    assert not issues and picture.size == (128,64)
+                    png = Path(temporary)/'preview.png'
+                    picture.save(png)
+                    with Image.open(png) as reopened:
+                        assert reopened.size == (128,64)
+                    result = exporter.export(saved,'project_release_test')
+                    assert (Path(result['directory'])/'ui_assets.c').is_file()
+                    dialog = studio.element('dialog')
+                    dialog.update(id='number',mode='number',text='VALUE')
+                    draft['pages'][0]['elements'].append(dialog)
+                    draft['pages'][0]['bindings']['KEY1']={'type':'open','target':'number'}
+                    simulated = studio.run(studio.run(studio.run(draft,'KEY1'),'RIGHT'),'KEY1')
+                    assert simulated['variables']['value'] == 1
+                    report['data_and_export'] = 'passed'
+                    report['validated'] = ['save/reopen','stale rejection','128x64 PNG','C export','dialog confirmation']
+                finally:
+                    core.DRAFTS, exporter.EXPORTS = old_drafts, old_exports
         else:
             import webview
             webview.settings['ALLOW_DOWNLOADS'] = True

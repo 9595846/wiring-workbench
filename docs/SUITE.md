@@ -42,6 +42,21 @@ MCP 配置不自动更改。原 MCP 仍访问原工作区；需要访问套装�
 
 ## 从本仓库构建
 
+### 构建公开试用包
+
+公开分发使用 `--public`，输出目录必须尚不存在。该模式不复制项目、模板库、OLED 草稿、请求、导出或历史，只附公开示例；普通个人迁移模式仍保留原行为。
+
+```powershell
+.\.venv\Scripts\python.exe tools/build_suite.py --public --output dist/PublicSuite
+.\.venv\Scripts\python.exe tools/package_preview.py dist/PublicSuite --version v0.1.0-preview.1 --output dist/releases
+```
+
+需要先安装下文的构建依赖。许可证收集需要访问 Node.js 官方仓库。打包检查会在临时中文目录启动 EXE，清除 PATH 中的 Python/Node，验证保存、渲染和导出；不替代完整原生界面或实物验收。失败时不会生成发布 ZIP。用户操作说明见 [Windows 试用指南](PREVIEW_RELEASE.md)。
+
+GitHub 的 `Windows preview release` 工作流在 `release/VERSION` 更新时运行，也可手动触发。全部检查成功才创建预发布 Release；同一版本号不覆盖已存在的 Release。
+
+### 个人套装构建
+
 主仓库为 https://github.com/9595846/wiring-workbench ，OLED 独立编辑器项目说明见 https://github.com/9595846/oled-ui-workbench 。`oled_companion/` 保存本套装使用的 OLED 配套源码与少量只读资源，不需要另一个本机工作区才能构建。
 
 ```powershell

@@ -1,0 +1,51 @@
+name: Windows preview release
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [release/VERSION]
+permissions:
+  contents: read
+concurrency:
+  group: windows-preview-release
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install build dependencies
+        run: python -m pip install -r requirements.txt -r requirements-desktop.txt
+      - name: Run regression and companion checks
+        run: |
+          python -X utf8 tools/run_tests.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -X utf8 tools/check_oled_companion.py
+      - name: Build without personal data
+        run: python -X utf8 tools/build_suite.py --public --output dist/PublicSuite
+      - name: Test relocated EXEs and package
+        run: |
+          $version = (Get-Content release/VERSION -Raw).Trim()
+          python -X utf8 tools/package_preview.py dist/PublicSuite --version $version --output dist/releases
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-preview
+          path: |
+            dist/releases/*
+            dist/PublicSuite/VALIDATION.json
+          if-no-files-found: error
+      - name: Publish tested prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content release/VERSION -Raw).Trim()
+          gh release create $version dist/releases/* --target $env:GITHUB_SHA --title "Windows 试用版 $version" --notes-file release/NOTES.md --prerelease
