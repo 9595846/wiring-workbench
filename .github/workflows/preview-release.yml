@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [release/VERSION]
+    paths: [release/VERSION, .github/workflows/preview-release.yml]
 permissions:
   contents: read
 concurrency:

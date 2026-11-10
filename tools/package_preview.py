@@ -34,7 +34,10 @@ def validate_and_package(suite, output, version):
                        cwd=relocated,env=env,check=True,timeout=120)
         wire=json.loads(wire_report.read_text('utf-8'))
         assert wire['status']=='passed' and wire['frozen']
-        assert Path(wire['bundled_node']).is_relative_to(relocated)
+        # Windows runner TEMP may use an 8.3 alias while the EXE resolves the
+        # long path. Compare file identity, not the textual path prefix.
+        expected_node=relocated/'WiringWorkbench/_internal/runtime/node.exe'
+        assert Path(wire['bundled_node']).samefile(expected_node), 'Self-test did not use the packaged Node executable'
         subprocess.run([str(relocated/'OLEDWorkbench/OLEDWorkbench.exe'),'--smoke-test'],
                        cwd=relocated,env=env,check=True,timeout=120)
         oled=json.loads((relocated/'oled_workspace/desktop_logs/last_run.json').read_text('utf-8'))
